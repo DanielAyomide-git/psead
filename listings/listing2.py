@@ -29,15 +29,13 @@ dna_window_features = encode_dna_window(
     dna_window_seq_2mer, char_to_vec
 )  # shape (1, 2, 4)
 
-# Define query, key, value projections (simplified for illustration)
-# In a real Transformer, these would be nn.Linear layers
-Q = K = V = dna_window_features
-
 # Instantiate PSEADAttention for Z2 group
 psead_attn_layer = PSEADAttention(group=CyclicGroup(2), input_dim=feature_dim)
 
 # Compute the PSEAD-augmented attention output
-out_psead_attn = psead_attn_layer(Q, K, V)
+out_psead_attn = psead_attn_layer(
+    dna_window_features
+)  # Corrected: Pass only one input tensor
 
-print(f"Input shape: {Q.shape}")
+print(f"Input shape: {dna_window_features.shape}")
 print(f"Output shape from PSEAD attention: {out_psead_attn.shape}")

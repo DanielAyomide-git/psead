@@ -6,6 +6,6 @@ A novel group-theoretic framework for incorporating local symmetry inductive bia
 
 You can install `psead` using pip:
 
-```bash
-pip install psead
-```
+````bash
+pip install -i https://test.pypi.org/simple/ psead```
+````

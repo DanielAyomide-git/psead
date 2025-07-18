@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "psead" 
 version = "0.1.0" # This should match __version__ in src/psead/__init__.py
 authors = [
-  { name="Daniel Ayomide Olanrewaju", email="" }, 
+  { name="Daniel Ayomide Olanrewaju", email="lanredaniel377@gmail.com" }, 
 ]
 description = "A Group-Theoretic Framework for Equivariant Transformers in Biological Systems"
 readme = "README.md"
-requires-python = ">=3.8" # Minimum Python version required
+requires-python = ">=3.8" 
 keywords = ["symmetry", "equivariant", "transformer", "attention", "biology", "machine learning", "group theory"]
 license = { file="LICENSE" }
 classifiers = [

@@ -75,30 +75,96 @@ class PSEADPolicyNetwork(nn.Module):
         return action_logits
 
 
-# Example usage for protein folding:
-# Assuming state_representation provides (batch_size, window_size, feature_dim)
-# group_type can be "Z2" for mirror, "D4" for dihedral, etc.
-# window_size defines the local patch size
-input_feature_dim = 64  # e.g., representing residue properties or contact distances
-hidden_dim = 128
-num_heads = 8
-num_layers = 4
-action_dim = 10  # e.g., 10 discrete local adjustments
+# --- Test Cases ---
 
-policy_network = PSEADPolicyNetwork(
-    input_feature_dim,
-    hidden_dim,
-    num_heads,
-    num_layers,
-    group_type="D2",  # Assuming a common local symmetry like C2 or D2
-    window_size=2,  # For D2, the natural action is on 2 elements, but for proteins, this would be larger.
-    # For a general D_n, k would be n. This example assumes k=n=2.
-    action_dim=action_dim,
+print("--- Testing PSEADPolicyNetwork with D2 group ---")
+input_feature_dim_d2 = 64
+hidden_dim_d2 = 128
+num_heads_d2 = 8
+num_layers_d2 = 4
+action_dim_d2 = 10
+window_size_d2 = 2  # For D2, the natural action is on 2 elements
+
+policy_network_d2 = PSEADPolicyNetwork(
+    input_feature_dim_d2,
+    hidden_dim_d2,
+    num_heads_d2,
+    num_layers_d2,
+    group_type="D2",
+    window_size=window_size_d2,
+    action_dim=action_dim_d2,
 )
 
-# In a DRL loop:
-# state = env.get_current_protein_state()
-# obs_patches = extract_local_patches(state, window_size) # Extract patches with potential symmetries
-# action_logits = policy_network(obs_patches)
-# action = select_action(action_logits)
-# next_state, reward, done, _ = env.step(action)
+# Create a dummy observation for the D2 network
+# Shape: (batch_size, window_size, input_feature_dim)
+dummy_observation_d2 = torch.randn(1, window_size_d2, input_feature_dim_d2)
+
+print(f"\nDummy Observation (D2) shape: {dummy_observation_d2.shape}")
+output_logits_d2 = policy_network_d2(dummy_observation_d2)
+print(f"Output Logits (D2) shape: {output_logits_d2.shape}")
+
+# Expected output shape: (batch_size, action_dim)
+assert output_logits_d2.shape == (1, action_dim_d2), "D2 network output shape mismatch!"
+print("D2 network test successful: Output shape matches expected.")
+
+
+print("\n--- Testing PSEADPolicyNetwork with Z2 group ---")
+input_feature_dim_z2 = 64
+hidden_dim_z2 = 128
+num_heads_z2 = 8
+num_layers_z2 = 4
+action_dim_z2 = 5
+window_size_z2 = 4  # Z2 (reflection) can act on any window size, e.g., 4
+
+policy_network_z2 = PSEADPolicyNetwork(
+    input_feature_dim_z2,
+    hidden_dim_z2,
+    num_heads_z2,
+    num_layers_z2,
+    group_type="Z2",
+    window_size=window_size_z2,
+    action_dim=action_dim_z2,
+)
+
+# Create a dummy observation for the Z2 network
+dummy_observation_z2 = torch.randn(2, window_size_z2, input_feature_dim_z2)
+
+print(f"\nDummy Observation (Z2) shape: {dummy_observation_z2.shape}")
+output_logits_z2 = policy_network_z2(dummy_observation_z2)
+print(f"Output Logits (Z2) shape: {output_logits_z2.shape}")
+
+# Expected output shape: (batch_size, action_dim)
+assert output_logits_z2.shape == (2, action_dim_z2), "Z2 network output shape mismatch!"
+print("Z2 network test successful: Output shape matches expected.")
+
+
+print("\n--- Testing PSEADPolicyNetwork with C4 group ---")
+input_feature_dim_c4 = 64
+hidden_dim_c4 = 128
+num_heads_c4 = 8
+num_layers_c4 = 4
+action_dim_c4 = 7
+window_size_c4 = 4  # For C4, the natural action is on 4 elements
+
+policy_network_c4 = PSEADPolicyNetwork(
+    input_feature_dim_c4,
+    hidden_dim_c4,
+    num_heads_c4,
+    num_layers_c4,
+    group_type="C4",
+    window_size=window_size_c4,
+    action_dim=action_dim_c4,
+)
+
+# Create a dummy observation for the C4 network
+dummy_observation_c4 = torch.randn(3, window_size_c4, input_feature_dim_c4)
+
+print(f"\nDummy Observation (C4) shape: {dummy_observation_c4.shape}")
+output_logits_c4 = policy_network_c4(dummy_observation_c4)
+print(f"Output Logits (C4) shape: {output_logits_c4.shape}")
+
+# Expected output shape: (batch_size, action_dim)
+assert output_logits_c4.shape == (3, action_dim_c4), "C4 network output shape mismatch!"
+print("C4 network test successful: Output shape matches expected.")
+
+print("\nAll basic network instantiation and forward pass tests completed.")
