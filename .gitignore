@@ -3,3 +3,4 @@
 /dist
 /src/psead.egg-info
 /src/psead.egg-info copy
+.pyproject.toml
